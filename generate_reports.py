@@ -4,6 +4,7 @@ sys.path.append("build")
 from Stringler import Stringler # type: ignore
 from PIL import Image, ImageDraw, ImageFont
 import matplotlib.pyplot as plt
+import json
 import os
 import io
 
@@ -110,7 +111,14 @@ def graph(data: Stringler, img: Image) -> None:
 # Statistics
 def stats(data: Stringler, img: Image, filename: str) -> None:
     draw = ImageDraw.Draw(img)
-    fnt = ImageFont.truetype("/usr/share/fonts/TTF/Arialbd.TTF", 14)
+    fnt_dir1, fnt_dir2 = "", ""
+
+    with open('fonts.json') as f:
+        file = json.load(f)
+        fnt_dir1 = file["fnt1"]
+        fnt_dir2 = file["fnt2"]
+
+    fnt = ImageFont.truetype(fnt_dir1, 14)
     # Filename
     draw.text((120, 29), filename, font=fnt, fill="black", anchor="la")
     # Tokens
@@ -150,7 +158,7 @@ def stats(data: Stringler, img: Image, filename: str) -> None:
     jarqueBera = str(round(data.jarqueBera(), 2))
     draw.text((865, 746), jarqueBera, font=fnt, fill="black", anchor="mm")
     # Copyright
-    fnt2 = ImageFont.truetype("/usr/share/fonts/TTF/Arial.TTF", 10)
+    fnt2 = ImageFont.truetype(fnt_dir2, 10)
     copyright = "Copyright © 2025, by aryelsoares"
     draw.text((1052, 800), copyright, font=fnt2, fill="black", anchor="mm")
     # save image
